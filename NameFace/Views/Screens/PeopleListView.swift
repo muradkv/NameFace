@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import PhotosUI
 
 struct PeopleListView: View {
     @State private var viewModel = PeopleViewModel()
@@ -36,6 +37,25 @@ struct PeopleListView: View {
                 }
             }
             .navigationTitle("People")
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    PhotosPicker(
+                        selection: $viewModel.selectedItem,
+                        matching: .images
+                    ) {
+                        Image(systemName: "plus")
+                    }
+                }
+                
+            }
+            .onChange(of: viewModel.selectedItem) {
+                Task {
+                    await viewModel.loadSelectedImage()
+                }
+            }
+            .sheet(isPresented: $viewModel.isShowingAddSheet) {
+                AddPersonView(viewModel: viewModel)
+            }
         }
     }
 }
