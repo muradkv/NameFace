@@ -56,6 +56,11 @@ struct PeopleListView: View {
             .sheet(isPresented: $viewModel.isShowingAddSheet) {
                 AddPersonView(viewModel: viewModel)
             }
+            .alert("Error", isPresented: $viewModel.isShowingError) {
+                Button("OK", role: .cancel) {}
+            } message: {
+                Text(viewModel.errorMessage)
+            }
         }
     }
 }
