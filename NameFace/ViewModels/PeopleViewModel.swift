@@ -59,9 +59,11 @@ final class PeopleViewModel {
         let newPerson = Person(name: trimmedName)
         do {
             try storageService.saveImage(imageData, filename: newPerson.imageFilename)
-            people.append(newPerson)
-            people.sort()
-            try storageService.savePeople(people)
+            var updatedPeople = people
+            updatedPeople.append(newPerson)
+            updatedPeople.sort()
+            try storageService.savePeople(updatedPeople)
+            people = updatedPeople
             resetAddPersonState()
         } catch {
             errorMessage = "Failed to save person: \(error.localizedDescription)"
