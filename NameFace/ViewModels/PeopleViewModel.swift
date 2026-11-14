@@ -23,13 +23,18 @@ final class PeopleViewModel {
     private(set) var errorMessage = ""
     
     private let storageService: StorageService
+    private let locationFetcher: LocationFetcher
     
     var isSaveDisabled: Bool {
         newPersonName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty || pendingImageData == nil
     }
     
-    init(storageService: StorageService = StorageService()) {
+    init(
+        storageService: StorageService = StorageService(),
+        locationFetcher: LocationFetcher = LocationFetcher()
+    ) {
         self.storageService = storageService
+        self.locationFetcher = locationFetcher
         people = storageService.loadPeople().sorted()
     }
     
@@ -56,7 +61,11 @@ final class PeopleViewModel {
             let imageData = pendingImageData
         else { return }
         
-        let newPerson = Person(name: trimmedName)
+        let location = locationFetcher.lastKnownLocation
+        let latitude = location?.latitude
+        let longitude = location?.longitude
+        
+        let newPerson = Person(name: trimmedName, latitude: latitude, longitude: longitude)
         do {
             try storageService.saveImage(imageData, filename: newPerson.imageFilename)
             var updatedPeople = people
@@ -79,5 +88,9 @@ final class PeopleViewModel {
         pendingImageData = nil
         newPersonName = ""
         isShowingAddSheet = false
+    }
+    
+    func startLocationTracking() {
+        locationFetcher.start()
     }
 }

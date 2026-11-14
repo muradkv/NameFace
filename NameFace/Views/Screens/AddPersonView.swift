@@ -38,6 +38,9 @@ struct AddPersonView: View {
                 }
             }
         }
+        .onAppear {
+            viewModel.startLocationTracking()
+        }
         .onDisappear {
             viewModel.resetAddPersonState()
         }
