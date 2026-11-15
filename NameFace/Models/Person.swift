@@ -39,4 +39,10 @@ struct Person: Comparable, Identifiable, Hashable, Codable {
 
 extension Person {
     static let preview = Person(name: "Example")
+    
+    static let previewWithLocation = Person(
+        name: "Example",
+        latitude: 37.3349,
+        longitude: -122.0090   
+    )
 }
