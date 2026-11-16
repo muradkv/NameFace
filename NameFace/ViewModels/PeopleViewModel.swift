@@ -88,6 +88,7 @@ final class PeopleViewModel {
         pendingImageData = nil
         newPersonName = ""
         isShowingAddSheet = false
+        locationFetcher.stop()
     }
     
     func startLocationTracking() {
